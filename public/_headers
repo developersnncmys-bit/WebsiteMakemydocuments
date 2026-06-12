@@ -1,0 +1,10 @@
+# Always re-check HTML so a browser never runs a stale page that points at JS
+# chunks deleted by a newer deploy (the cause of intermittent "client-side
+# exception" errors that a refresh fixes). Hashed build assets are safe to
+# cache forever. Placed in public/ so it ships inside the deployed out/ folder.
+
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
