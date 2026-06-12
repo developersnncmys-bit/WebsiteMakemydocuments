@@ -9,7 +9,7 @@ import {
 } from 'lucide-react'
 import useScrollReveal from '../hooks/useScrollReveal'
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://mmdbackend.onrender.com'
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.makemydocuments.com'
 
 // Three-colour palette rotated across role cards so the visual variety from the
 // hardcoded list is preserved when roles are fetched from the backend.

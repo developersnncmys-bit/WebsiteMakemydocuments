@@ -7,7 +7,7 @@
 // admin panel's lib/formSchemas.ts so each lead renders with the right labels.
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL || 'https://mmdbackend.onrender.com'
+  process.env.NEXT_PUBLIC_API_URL || 'https://api.makemydocuments.com'
 
 export async function submitLead(payload) {
   try {

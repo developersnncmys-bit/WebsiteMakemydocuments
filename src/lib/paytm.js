@@ -5,7 +5,7 @@
 // /requestsuccess/<service> on success or /failure/<service> on failure.
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL || 'https://mmdbackend.onrender.com'
+  process.env.NEXT_PUBLIC_API_URL || 'https://api.makemydocuments.com'
 
 export async function paytmCheckout({ orderId, amount, service, mobile, name }) {
   try {

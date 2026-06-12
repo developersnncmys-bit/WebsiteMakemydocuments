@@ -23,7 +23,7 @@ export async function generateStaticParams() {
   // The backend runs on Render's free tier which cold-starts after idle time —
   // the first request can take 30-60s. Retry a few times so a sleeping backend
   // doesn't silently strip dynamic slugs out of the build.
-  const base = process.env.NEXT_PUBLIC_API_URL || 'https://mmdbackend.onrender.com'
+  const base = process.env.NEXT_PUBLIC_API_URL || 'https://api.makemydocuments.com'
   let slugs = [...SLUGS]
   let apiSlugs = []
 
@@ -59,7 +59,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const { slug } = await params
-  const base = process.env.NEXT_PUBLIC_API_URL || 'https://mmdbackend.onrender.com'
+  const base = process.env.NEXT_PUBLIC_API_URL || 'https://api.makemydocuments.com'
   const canonical = `https://makemydocuments.com/blogs/${slug}`
   const fallback = {
     title: 'Make My Documents Blog | Expert Tips on Document Services',

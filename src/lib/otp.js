@@ -3,7 +3,7 @@
 // shaped { ok, error } so the calling form can do `if (!r.ok) setError(...)`.
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL || 'https://mmdbackend.onrender.com'
+  process.env.NEXT_PUBLIC_API_URL || 'https://api.makemydocuments.com'
 
 export async function sendOtp(mobile) {
   try {

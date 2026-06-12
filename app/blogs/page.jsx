@@ -11,7 +11,7 @@ export const metadata = {
 // app/blogs/[slug]/page.jsx generateStaticParams so a sleeping backend
 // doesn't strip the schema out of the build.
 async function fetchPublishedBlogs() {
-  const base = process.env.NEXT_PUBLIC_API_URL || 'https://mmdbackend.onrender.com'
+  const base = process.env.NEXT_PUBLIC_API_URL || 'https://api.makemydocuments.com'
   for (let attempt = 1; attempt <= 4; attempt++) {
     try {
       const ctrl = new AbortController()

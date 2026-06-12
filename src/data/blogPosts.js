@@ -625,7 +625,7 @@ export const BLOG_POSTS = [
 // icon + accent gradient from the category. The bundled BLOG_POSTS above act as
 // a fallback when the API is empty or unreachable, so the site always has content.
 // ─────────────────────────────────────────────────────────────
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://mmdbackend.onrender.com'
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.makemydocuments.com'
 
 const DEFAULT_PRES = { Icon: BookOpen, gradient: 'linear-gradient(145deg, #0f172a 0%, #334155 55%, #64748b 100%)' }
 const CAT_PRESENTATION = {
