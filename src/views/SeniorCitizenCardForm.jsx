@@ -1,0 +1,550 @@
+﻿'use client'
+
+import { useState, useMemo, useRef, useEffect } from 'react'
+import useStepBackButton from '../hooks/useStepBackButton'
+import { submitLead } from '../lib/submitLead'
+import { sendOtp, verifyOtpApi } from '../lib/otp'
+import { paytmCheckout } from '../lib/paytm'
+import Link from 'next/link'
+import {
+  User, MapPin, Phone, Check, AlertCircle, Wallet, ChevronRight, ChevronLeft, ArrowLeft
+} from 'lucide-react'
+import { getDistricts } from '../data/locationData'
+
+/* --- Constants --------------------------------------- */
+
+const TOTAL = 3
+const STEPS = ['Application', 'Address', 'Contact']
+
+const STEP_META = [
+  { title: 'Application',               sub: 'Enter your personal details',             Icon: User,  gradient: 'linear-gradient(135deg,#1A3D6E,#2E68B1)' },
+  { title: 'Present Residential Address', sub: 'Your current address details',          Icon: MapPin, gradient: 'linear-gradient(135deg,#1A3D6E,#2E68B1)' },
+  { title: 'Contact Details',            sub: 'Your mobile number and email address',   Icon: Phone, gradient: 'linear-gradient(135deg,#1A3D6E,#2E68B1)' },
+]
+
+const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
+const GENDERS      = ['Female', 'Male', 'Transgender/Other']
+
+const STATES = ['Karnataka']
+
+const PINCODE_PREFIXES = {} // state-pincode matching disabled — only the 6-digit format is required
+
+const validPin = (pin, state) => {
+  if (!pin || pin.length !== 6 || !state || !PINCODE_PREFIXES[state]) return true
+  return PINCODE_PREFIXES[state].includes(parseInt(pin.slice(0, 2)))
+}
+
+const isAtLeast60 = (dob) => {
+  if (!dob) return false
+  const today  = new Date(); today.setHours(0, 0, 0, 0)
+  const minDob = new Date(today); minDob.setFullYear(today.getFullYear() - 60)
+  return new Date(dob) <= minDob
+}
+
+
+/* --- Sub-components ---------------------------------- */
+
+function Field({ label, children }) {
+  return (
+    <div className="pf5-field">
+      <label className="pf5-lbl">{label}<span className="pf5-ast"> *</span></label>
+      {children}
+    </div>
+  )
+}
+
+function ValidInp({ valid, count, children }) {
+  return (
+    <div className="pf5-inp-wrap">
+      {children}
+      {valid  && <span className="pf5-tick"><Check size={11} strokeWidth={3} /></span>}
+      {count && !valid && <span className="pf5-count">{count}</span>}
+    </div>
+  )
+}
+
+/* --- Main component ---------------------------------- */
+
+export default function SeniorCitizenCardForm() {
+  const [step,  setStep]   = useState(1)
+  useStepBackButton(step, setStep)
+  const [phase, setPhase]  = useState('form')
+  const [error, setError]  = useState('')
+
+  const goPhase = (p) => { setPhase(p) }
+
+  useEffect(() => {
+    const base = window.location.pathname.replace(/\/(proceed-to-pay|otp-verification)$/, '')
+    if (phase === 'otp') {
+      window.history.replaceState(null, '', base + '/otp-verification')
+    } else if (phase === 'summary') {
+      window.history.replaceState(null, '', base + '/proceed-to-pay')
+    } else {
+      window.history.replaceState(null, '', base)
+    }
+  }, [phase])
+
+  const orderId = useMemo(() => {
+    const ts  = Date.now().toString()
+    const rnd = Math.floor(Math.random() * 9000 + 1000)
+    return 'MMD' + ts + rnd
+  }, [])
+
+  /* -- Form state -- */
+  const [name,       setName]       = useState('')
+  const [dob,        setDob]        = useState('')
+  const [gender,     setGender]     = useState('')
+  const [bloodGroup, setBloodGroup] = useState('')
+  const [address,    setAddress]    = useState('')
+  const [stateVal,   setStateVal]   = useState('')
+  const [district,   setDistrict]   = useState('')
+  const [pinCode,    setPinCode]    = useState('')
+  const [mobile,     setMobile]     = useState('')
+  const [email,      setEmail]      = useState('')
+  const [payBusy, setPayBusy] = useState(false)
+
+
+  /* -- OTP state -- */
+  const [otpDigits,   setOtpDigits]   = useState(['','','',''])
+  const [otpVerified, setOtpVerified] = useState(false)
+  const [otpError,    setOtpError]    = useState('')
+  const [resendTimer, setResendTimer] = useState(0)
+  const otpRefs = useRef([])
+  const otp = otpDigits.join('')
+
+  /* -- OTP handlers -- */
+  const startResendTimer = () => {
+    sendOtp(mobile).catch(() => setOtpError('Could not send OTP. Please try again.'));
+    setResendTimer(30)
+    const t = setInterval(() => setResendTimer(p => { if (p <= 1) { clearInterval(t); return 0 } return p - 1 }), 1000)
+  }
+  const verifyOtp = async () => {
+    if (otp.length !== 4) { setOtpError('Please enter all 4 digits.'); return }
+    const _otpRes = await verifyOtpApi(mobile, otpDigits.join(''));
+    if (!_otpRes.ok) { setOtpError(_otpRes.error || 'Invalid OTP. Please try again.'); return }
+    setOtpVerified(true); setOtpError(''); setError('')
+    // Lead is saved now (unpaid). Paytm callback flips it to paid after payment.
+    submitLead({
+      orderId,
+      service: 'Senior Citizen Card',
+      name,
+      mobileNumber: mobile,
+      email,
+      address,
+      district,
+      state: stateVal,
+      pinCode,
+      gender,
+      dateOfBirth: dob,
+      amount: 300,
+      paymentStatus: 'unpaid',
+      source: 'Website',
+      formData: {
+        dateOfBirth: dob,
+        gender,
+        bloodGroup,
+        state: stateVal,
+        pinCode,
+      },
+    })
+    setTimeout(() => goPhase('summary'), 700)
+  }
+  const handleOtpDigit = (i, val) => {
+    const digit = val.replace(/\D/g,'').slice(-1)
+    const next = [...otpDigits]; next[i] = digit
+    setOtpDigits(next); setOtpError('')
+    if (digit && i < 3) setTimeout(() => otpRefs.current[i + 1]?.focus(), 10)
+  }
+  const handleOtpKey = (i, e) => {
+    if (e.key === 'Backspace') {
+      if (!otpDigits[i] && i > 0) otpRefs.current[i - 1]?.focus()
+      else { const next = [...otpDigits]; next[i] = ''; setOtpDigits(next) }
+    }
+    if (e.key === 'ArrowLeft'  && i > 0) otpRefs.current[i - 1]?.focus()
+    if (e.key === 'ArrowRight' && i < 3) otpRefs.current[i + 1]?.focus()
+  }
+  const handleOtpPaste = (e) => {
+    const pasted = e.clipboardData.getData('text').replace(/\D/g,'').slice(0, 4)
+    if (pasted) {
+      const next = pasted.split('').concat(['','','','']).slice(0, 4)
+      setOtpDigits(next); setOtpError('')
+      setTimeout(() => otpRefs.current[Math.min(pasted.length, 3)]?.focus(), 10)
+      e.preventDefault()
+    }
+  }
+
+  useEffect(() => { if (phase === 'otp') { setOtpDigits(['','','','']); setOtpVerified(false); setOtpError(''); startResendTimer() } }, [phase])
+
+  /* -- Validation -- */
+  const validateStep = (s) => {
+    if (s === 1) {
+      if (!name.trim())  return { msg: 'Please enter your name.', step: 1 }
+      if (!dob)          return { msg: 'Please select your date of birth.', step: 1 }
+      if (!isAtLeast60(dob)) return { msg: 'You must be at least 60 years old.', step: 1 }
+      if (!gender)       return { msg: 'Please select your gender.', step: 1 }
+      if (!bloodGroup)   return { msg: 'Please select your blood group.', step: 1 }
+    }
+    if (s === 2) {
+      if (!address.trim()) return { msg: 'Please enter your address.', step: 2 }
+      if (!stateVal)       return { msg: 'Please select your state.', step: 2 }
+      if (!district)       return { msg: 'Please select your district.', step: 2 }
+      if (!pinCode || pinCode.length !== 6) return { msg: 'Please enter a valid 6-digit pin code.', step: 2 }
+      if (!validPin(pinCode, stateVal)) return { msg: `Pin code ${pinCode} is not valid for ${stateVal}.`, step: 2 }
+    }
+    if (s === 3) {
+      if (!/^[6-9]\d{9}$/.test(mobile)) return { msg: 'Please enter a valid 10-digit mobile number.', step: 3 }
+      if (!/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(email)) return { msg: 'Please enter a valid email address.', step: 3 }
+    }
+    return null
+  }
+
+  const validateAll = () => {
+    for (let s = 1; s <= TOTAL; s++) {
+      const r = validateStep(s); if (r) return r
+    }
+    return null
+  }
+
+  const next = () => {
+    const r = step === TOTAL ? validateAll() : validateStep(step)
+    if (r) { setError(r.msg); setStep(r.step); return }
+    setError('')
+    if (step === TOTAL) { goPhase('otp'); return }
+    setStep(s => s + 1)
+  }
+  const back = () => { setError(''); setStep(s => Math.max(s - 1, 1)) }
+
+  const submitPayment = async () => {
+    if (payBusy) return
+    setError(''); setPayBusy(true)
+    const r = await paytmCheckout({
+      orderId, amount: 300, service: "Senior Citizen Card", mobile, name,
+    })
+    if (!r.ok) { setError(r.error || 'Could not start payment.'); setPayBusy(false) }
+  }
+
+  /* -- Payment success -- */
+  /* -- Payment page -- */
+  if (phase === 'payment') {
+    return (
+      <div className="pf5-page">
+        <div className="pf5-card">
+
+          <div className="pf5-head-top">
+            <button className="pf5-close-btn" onClick={() => { goPhase('summary'); setError('') }}>
+              <ArrowLeft size={16} strokeWidth={2} />
+            </button>
+            <span className="pf5-phase-lbl">Secure Payment</span>
+            <div style={{ width: 32 }} />
+          </div>
+
+          <div className="pf5-icon-wrap">
+            <div className="pf5-icon" style={{ background: 'linear-gradient(135deg,#16A34A,#15803D)' }}>
+              <Wallet size={26} strokeWidth={1.8} color="#fff" />
+            </div>
+          </div>
+
+          <h2 className="pf5-title">Complete Payment</h2>
+          <p className="pf5-sub">Secure checkout · ₹300 all-inclusive</p>
+
+          <div className="pf5-content">
+            <div className="pf5-pay-banner">
+              <span className="pf5-pay-label">Total Payable</span>
+              <span className="pf5-pay-amount">₹300</span>
+              <span className="pf5-pay-note">All charges included · No hidden fees</span>
+            </div>
+            <p className="pf5-secure" style={{ marginTop: 18 }}>
+              You will be redirected to Paytm to complete your payment securely.
+            </p>
+          </div>
+
+          {error && <div className="pf5-error"><AlertCircle size={14} strokeWidth={2} /> {error}</div>}
+
+          <div className="pf5-footer">
+            <p className="pf5-legal">
+              By clicking Pay, you accept our <Link href="/terms-conditions">Terms</Link> and <Link href="/privacy-policy">Privacy Policy</Link>.
+            </p>
+            <button className="pf5-cta-btn pf5-pay" onClick={submitPayment} disabled={payBusy}>
+              <Check size={15} /> {payBusy ? 'Redirecting…' : `Pay ₹300 with Paytm`}
+            </button>
+          </div>
+
+        </div>
+      </div>
+    )
+  }
+
+  /* -- OTP page -- */
+  if (phase === 'otp') {
+    return (
+      <div className="pf5-page">
+        <div className="pf5-card">
+          <div className="pf5-head-top">
+            <button className="pf5-close-btn" onClick={() => { goPhase('form'); setStep(TOTAL); setError('') }}>
+              <ArrowLeft size={16} strokeWidth={2} />
+            </button>
+            <span className="pf5-phase-lbl">OTP Verification</span>
+            <div style={{ width: 32 }} />
+          </div>
+          {otpVerified ? (
+            <div className="pf5-otp-ok"><Check size={15} strokeWidth={2.5} /> Mobile verified! Redirecting...</div>
+          ) : (
+            <div className="pf5-otp-body">
+              <div className="pf5-otp-target">
+                OTP sent to <span className="pf5-otp-num">+91 ******{mobile.slice(-4)}</span>
+              </div>
+              <label className="pf5-otp-lbl">Enter OTP <span className="pf5-ast">*</span></label>
+              <div className="pf5-otp-boxes" onPaste={handleOtpPaste}>
+                {otpDigits.map((d, i) => (
+                  <input key={i} ref={el => otpRefs.current[i] = el}
+                    className={`pf5-otp-box${d ? ' filled' : ''}`}
+                    type="text" inputMode="numeric" maxLength={1} value={d}
+                    onChange={e => handleOtpDigit(i, e.target.value)}
+                    onKeyDown={e => handleOtpKey(i, e)}
+                    onFocus={e => e.target.select()} />
+                ))}
+              </div>
+              {otpError && <p className="pf5-otp-err">{otpError}</p>}
+              <p className="pf5-otp-resend-txt">
+                Not Received?{' '}
+                {resendTimer > 0
+                  ? <span>Resend in {resendTimer}s</span>
+                  : <button className="pf5-otp-resend-link" onClick={startResendTimer}>Resend OTP</button>
+                }
+              </p>
+              <button className="pf5-otp-verify-btn" onClick={verifyOtp}>Verify</button>
+              {error && <div className="pf5-error" style={{ marginTop: 8 }}><AlertCircle size={14} strokeWidth={2} /> {error}</div>}
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  /* -- Summary page -- */
+  if (phase === 'summary') {
+    return (
+      <div className="pf5-page">
+        <div className="pf5-summary-card">
+          <h2 className="pf5-summary-title">Thank You for Your Submission!</h2>
+          <p className="pf5-summary-sub">Please review your details before proceeding to payment.</p>
+          <div className="pf5-summary-rows">
+            {[
+              { label: 'Name',           value: name           },
+              { label: 'Mobile Number',  value: mobile         },
+              { label: 'Order ID',       value: orderId        },
+              { label: 'Services',       value: 'SeniorCitizen' },
+              { label: 'Payment Amount', value: '300'          },
+            ].map(({ label, value }) => (
+              <div key={label} className="pf5-summary-row">
+                <span className="pf5-summary-lbl">{label}:</span>
+                <div className="pf5-summary-val">{value}</div>
+              </div>
+            ))}
+          </div>
+          <button className="pf5-proceed-btn" onClick={submitPayment} disabled={payBusy}>
+            {payBusy ? 'Redirecting…' : (<>Proceed to Pay <ChevronRight size={18} /></>)}
+          </button>
+          <button className="pf5-back-link" style={{ marginTop: 8 }} onClick={() => goPhase('otp')}>
+            <ArrowLeft size={13} /> Back
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  /* -- Main form (steps 1–3) -- */
+  const { title, sub, Icon: StepIcon, gradient } = STEP_META[step - 1]
+
+  return (
+    <div className="pf5-page">
+      <div className="pf5-breadcrumb">
+        <Link href="/">Home</Link><span> / </span><Link href="/senior-citizen-card">Senior Citizen Card</Link><span> / </span><span>Form</span>
+      </div>
+      <div className="pf5-card">
+
+        {/* Step dots */}
+        <div className="pf5-head-top">
+          <div style={{ width: 32 }} />
+          <div className="pf5-step-dots">
+            {STEPS.map((lbl, i) => (
+              <div key={lbl}
+                className={`pf5-dot${i + 1 === step ? ' cur' : i + 1 < step ? ' done' : ''}`}
+                onClick={() => { setError(''); setStep(i + 1) }}
+                title={lbl}
+              />
+            ))}
+          </div>
+          <div style={{ width: 32 }} />
+        </div>
+
+        {/* Icon */}
+        <div className="pf5-icon-wrap">
+          <div className="pf5-icon" style={{ background: gradient }}>
+            <StepIcon size={26} strokeWidth={1.8} color="#fff" />
+          </div>
+        </div>
+
+        <h2 className="pf5-title">{title}</h2>
+        <p className="pf5-sub">{sub}</p>
+
+        <div className="pf5-content">
+
+          {/* -- Step 1: Application -- */}
+          {step === 1 && (
+            <>
+              <div className="pf5-row2">
+                <Field label="Name">
+                  <ValidInp valid={name.trim().length > 0}>
+                    <input className="pf5-inp" type="text" placeholder="Enter your name"
+                      value={name} onChange={e => setName(e.target.value)} />
+                  </ValidInp>
+                </Field>
+                <Field label="Date of Birth">
+                  {(() => {
+                    const valid      = dob !== '' && isAtLeast60(dob)
+                    const tooYoung   = dob !== '' && !isAtLeast60(dob)
+                    return (
+                      <>
+                        <ValidInp valid={valid}>
+                          <input className={`pf5-inp${tooYoung ? ' pf5-inp-warn' : ''}`}
+                            type="date" value={dob}
+                            max={new Date().toISOString().split('T')[0]}
+                            onChange={e => { setDob(e.target.value); setError('') }} />
+                        </ValidInp>
+                        {tooYoung && (
+                          <div className="pf5-age-warn" style={{ color: '#DC2626' }}>
+                            You must be at least 60 years old.
+                          </div>
+                        )}
+                      </>
+                    )
+                  })()}
+                </Field>
+              </div>
+              <div className="pf5-row2">
+                <Field label="Gender">
+                  <ValidInp valid={gender !== ''}>
+                    <select className="pf5-inp" value={gender} onChange={e => setGender(e.target.value)}>
+                      <option value="">Select Gender</option>
+                      {GENDERS.map(g => <option key={g}>{g}</option>)}
+                    </select>
+                  </ValidInp>
+                </Field>
+                <Field label="Blood Group">
+                  <ValidInp valid={bloodGroup !== ''}>
+                    <select className="pf5-inp" value={bloodGroup} onChange={e => setBloodGroup(e.target.value)}>
+                      <option value="">Select Blood Group</option>
+                      {BLOOD_GROUPS.map(b => <option key={b}>{b}</option>)}
+                    </select>
+                  </ValidInp>
+                </Field>
+              </div>
+            </>
+          )}
+
+          {/* -- Step 2: Present Residential Address -- */}
+          {step === 2 && (
+            <>
+              <Field label="Address">
+                <ValidInp valid={address.trim().length > 0}>
+                  <input className="pf5-inp" type="text" placeholder="Enter your address"
+                    value={address} onChange={e => setAddress(e.target.value)} />
+                </ValidInp>
+              </Field>
+              <Field label="State">
+                <ValidInp valid={stateVal !== ''}>
+                  <select className="pf5-inp" value={stateVal}
+                    onChange={e => { setStateVal(e.target.value); setDistrict(''); setPinCode('') }}>
+                    <option value="">Select State</option>
+                    {STATES.map(s => <option key={s}>{s}</option>)}
+                  </select>
+                </ValidInp>
+              </Field>
+              <Field label="District">
+                <ValidInp valid={district !== ''}>
+                  <select className="pf5-inp" value={district} disabled={!stateVal}
+                    onChange={e => setDistrict(e.target.value)}
+                    style={!stateVal ? { opacity: .5, cursor: 'not-allowed' } : {}}>
+                    <option value="">{stateVal ? 'Select District' : 'Select state first'}</option>
+                    {getDistricts(stateVal).map(d => <option key={d}>{d}</option>)}
+                  </select>
+                </ValidInp>
+              </Field>
+              <Field label="Pin Code">
+                {(() => {
+                  const ok       = pinCode.length === 6 && validPin(pinCode, stateVal)
+                  const mismatch = pinCode.length === 6 && stateVal && !validPin(pinCode, stateVal)
+                  return (
+                    <>
+                      <ValidInp valid={ok} count={pinCode.length > 0 && pinCode.length < 6 ? `${pinCode.length}/6` : null}>
+                        <input className={`pf5-inp${mismatch ? ' pf5-inp-warn' : ''}`}
+                          type="text" placeholder="Enter Pin Code" maxLength={6}
+                          value={pinCode} onChange={e => { setPinCode(e.target.value.replace(/\D/g,'')); setError('') }} />
+                      </ValidInp>
+                      {mismatch && <div className="pf5-age-warn">? Pincode doesn't match <strong>{stateVal}</strong>.</div>}
+                    </>
+                  )
+                })()}
+              </Field>
+            </>
+          )}
+
+          {/* -- Step 3: Contact Details -- */}
+          {step === 3 && (
+            <>
+              <Field label="Email Id">
+                {(() => {
+                  const valid   = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(email)
+                  const invalid = email.length > 0 && !valid
+                  return (
+                    <>
+                      <ValidInp valid={valid}>
+                        <input className={`pf5-inp${invalid ? ' pf5-inp-warn' : ''}`}
+                          type="email" placeholder="your@email.com"
+                          value={email} onChange={e => { setEmail(e.target.value); setError('') }} />
+                      </ValidInp>
+                      {invalid && <div className="pf5-age-warn">? Please enter a valid email address.</div>}
+                    </>
+                  )
+                })()}
+              </Field>
+              <Field label="Mobile Number">
+                {(() => {
+                  const valid        = /^[6-9]\d{9}$/.test(mobile)
+                  const invalidStart = mobile.length === 10 && !/^[6-9]/.test(mobile)
+                  return (
+                    <>
+                      <ValidInp valid={valid} count={mobile.length > 0 && mobile.length < 10 ? `${mobile.length}/10` : null}>
+                        <input className={`pf5-inp${invalidStart ? ' pf5-inp-warn' : ''}`}
+                          type="tel" placeholder="10-digit mobile number" maxLength={10}
+                          value={mobile} onChange={e => { setMobile(e.target.value.replace(/\D/g,'')); setError('') }} />
+                      </ValidInp>
+                      {invalidStart && <div className="pf5-age-warn">? Invalid number.</div>}
+                    </>
+                  )
+                })()}
+              </Field>
+              <p className="pf5-toc">
+                By clicking submit, you agree to our{' '}
+                <Link href="/terms-conditions">Terms &amp; Conditions</Link> and{' '}
+                <Link href="/privacy-policy">Privacy Policy</Link>.
+              </p>
+            </>
+          )}
+
+        </div>
+
+        {error && <div className="pf5-error"><AlertCircle size={14} strokeWidth={2} /> {error}</div>}
+
+        <div className="pf5-footer">
+          <button className="pf5-cta-btn" onClick={next}>
+            {step === TOTAL ? 'Submit' : 'Continue'} <ChevronRight size={17} />
+          </button>
+          {step > 1 && <button className="pf5-back-link" onClick={back}><ChevronLeft size={13} /> Back</button>}
+        </div>
+
+      </div>
+    </div>
+  )
+}

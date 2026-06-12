@@ -1,0 +1,15 @@
+# dependencies
+node_modules
+
+# build output
+.next
+dist
+out
+
+# local env files (keep .env.example tracked)
+.env
+.env*.local
+
+# misc
+*.log
+.DS_Store

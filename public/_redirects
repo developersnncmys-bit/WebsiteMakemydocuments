@@ -1,0 +1,16 @@
+# Netlify redirect rules — placed in public/ so Next.js copies them into out/
+# and they ship INSIDE the deployed folder. This way the rules apply even when
+# the site is deployed by uploading the out/ folder directly (netlify.toml at
+# the repo root is NOT included in such deploys).
+#
+# Non-forced 200 rewrites: existing static files are served as-is; only unknown
+# paths fall through to the fallback shell.
+
+# Blogs added from the admin panel after the last build have no pre-generated
+# page. Serve the prebuilt __blog_fallback shell — BlogDetail reads the real
+# slug from the URL and fetches the content from the backend at runtime.
+/blogs/*  /blogs/__blog_fallback.html  200
+
+# Post-payment pages: unknown service slugs fall back to the generic shell.
+/request_success/*  /request_success/general/index.html  200
+/failure/*  /failure/general/index.html  200

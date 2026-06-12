@@ -1,0 +1,32 @@
+[build]
+  command = "npm run build"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Blogs added from the admin panel AFTER a deploy don't have a pre-generated
+# static file at /blogs/<new-slug>/index.html, so Netlify 404s the URL. This
+# rewrite serves the FALLBACK_SLUG shell for any unknown /blogs/* path.
+# BlogDetail is a client component — it reads the real slug from the URL via
+# `useParams()` and fetches the content from the backend, so the same shell
+# renders any slug correctly. force defaults to false, so known slugs whose
+# static files exist are still served directly.
+[[redirects]]
+  from = "/blogs/*"
+  to = "/blogs/__blog_fallback.html"
+  status = 200
+
+# Defence-in-depth: if Paytm ever redirects to /requestsuccess/<slug> for a
+# service we don't have a prebuilt page for, fall back to the generic shell.
+# The backend already routes unknown services to /general, so this is rarely
+# hit — but it avoids a 404 on the user-facing post-payment page.
+[[redirects]]
+  from = "/request_success/*"
+  to = "/request_success/general/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/failure/*"
+  to = "/failure/general/index.html"
+  status = 200
