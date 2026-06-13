@@ -72,6 +72,16 @@ const S = {
     color: '#333',
     lineHeight: 1.55,
   },
+  whatsapp: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    textDecoration: 'none',
+    color: '#25d366',
+    fontWeight: 'bold',
+    marginTop: '6px',
+    gap: '8px',
+  },
+  whatsappLogo: { width: '22px', height: '22px' },
   btnWrap: {
     width: '100%',
     display: 'flex',
@@ -134,6 +144,25 @@ export default function RequestSuccess({ slug }) {
 
           <h1 style={S.header} className="rs-header">Application Received</h1>
           <p style={S.message} className="rs-message">{svc.message}</p>
+
+          {/* WhatsApp upload CTA — only services that need eKYC document
+              upload (PAN Card, Senior Citizen Card) set svc.cta. */}
+          {svc.cta?.href && (
+            <a
+              href={svc.cta.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={S.whatsapp}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+                alt="WhatsApp"
+                style={S.whatsappLogo}
+              />
+              <span>{svc.cta.label}</span>
+            </a>
+          )}
 
           <div style={S.btnWrap}>
             <Link href="/" style={S.back}>Back to Home</Link>

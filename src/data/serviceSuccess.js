@@ -19,11 +19,13 @@ const WHATSAPP_CTA = {
   label: 'Upload your documents via WhatsApp',
 }
 
+// Only PAN Card and Senior Citizen Card need document upload over WhatsApp
+// (eKYC / eSign). Every other service's success page shows no WhatsApp CTA.
 const docService = (slug, label, home) => ({
   slug, label, home,
   image: IMG_DEFAULT,
   message: `We have received your ${label} application. One of our consultants will get back to you shortly.`,
-  cta: WHATSAPP_CTA,
+  cta: null,
 })
 
 export const SERVICES = [

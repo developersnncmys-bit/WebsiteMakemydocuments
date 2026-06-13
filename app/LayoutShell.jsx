@@ -61,7 +61,11 @@ export default function LayoutShell({ children }) {
   }, [pathname])
 
   const isAffidavitForm = pathname.startsWith('/affidavit/')
-  const isServiceForm = pathname.endsWith('-form')
+  // Use includes() not endsWith(): when a form enters OTP/payment it rewrites
+  // the URL to `/<service>-form/otp-verification` or `/proceed-to-pay`, so the
+  // path no longer *ends* with `-form`. includes() keeps nav/footer/WhatsApp
+  // FAB hidden across the whole form flow (form → OTP → payment).
+  const isServiceForm = pathname.includes('-form')
   const isBlogPage = pathname === '/blogs' || pathname.startsWith('/blogs/')
   // Standalone post-payment screens — no nav, no footer, no WhatsApp bubble.
   const isStandalone =
