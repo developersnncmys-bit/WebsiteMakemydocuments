@@ -127,7 +127,7 @@ export default function FourWheelerInsuranceForm() {
         pinCode: pincode,
       },
     })
-    setTimeout(() => setPhase('success'), 700)
+    setTimeout(() => { window.location.href = '/request_success/fourwheelerinsurance' }, 700)
   }
 
   const validate = (s) => {

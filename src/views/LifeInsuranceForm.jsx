@@ -135,7 +135,7 @@ export default function LifeInsuranceForm() {
         pinCode: pincode,
       },
     })
-    setTimeout(() => setPhase('success'), 700)
+    setTimeout(() => { window.location.href = '/request_success/lifeinsurance' }, 700)
   }
 
   /* -- validation -- */

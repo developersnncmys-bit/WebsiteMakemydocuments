@@ -141,7 +141,7 @@ export default function CommercialVehicleInsuranceForm() {
         pinCode: pincode,
       },
     })
-    setTimeout(() => setPhase('success'), 700)
+    setTimeout(() => { window.location.href = '/request_success/commercialvehicleinsurance' }, 700)
   }
 
   /* -- validation -- */

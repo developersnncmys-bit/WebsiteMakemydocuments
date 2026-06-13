@@ -145,7 +145,7 @@ export default function HealthInsuranceForm() {
         pinCode: pincode,
       },
     })
-    setTimeout(() => setPhase('success'), 700)
+    setTimeout(() => { window.location.href = '/request_success/healthinsurance' }, 700)
   }
 
   const validate = (s) => {

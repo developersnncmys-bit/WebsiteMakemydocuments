@@ -129,7 +129,7 @@ export default function TwoWheelerInsuranceForm() {
         pinCode: pincode,
       },
     })
-    setTimeout(() => setPhase('success'), 700)
+    setTimeout(() => { window.location.href = '/request_success/twowheelerinsurance' }, 700)
   }
 
   /* -- validation -- */
