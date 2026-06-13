@@ -21,7 +21,7 @@ const CHIPS = [
   { label: 'Rental Agreement',    path: '/rental-agreement',    Icon: Home           },
   { label: 'Insurance',           path: '/insurance',           Icon: ShieldCheck    },
   { label: 'Senior Citizen Card', path: '/senior-citizen-card', Icon: Users          },
-  { label: 'Police Verification', path: '/police-verification', Icon: BadgeCheck     },
+  { label: 'Police Verification', path: '/policeverification', Icon: BadgeCheck     },
   { label: 'MSME Certificate',    path: '/msme-registration',   Icon: Building2      },
   { label: 'Lease Agreement',     path: '/lease-agreement',     Icon: FileText       },
   { label: 'Affidavits',          path: '/affidavits',          Icon: Scale          },

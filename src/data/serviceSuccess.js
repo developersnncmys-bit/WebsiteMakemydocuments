@@ -53,7 +53,7 @@ export const SERVICES = [
     ['leaseagreement', 'Lease Agreement', '/lease-agreement'],
     ['msmeregistration', 'MSME Registration', '/msme-registration'],
     ['policeclearancecertificatepcc', 'Police Clearance Certificate (PCC)', '/police-clearance'],
-    ['policeverificationcertificatepvc', 'Police Verification Certificate (PVC)', '/police-verification'],
+    ['policeverificationcertificatepvc', 'Police Verification Certificate (PVC)', '/policeverification'],
     ['affidavitsannexure', 'Affidavit', '/affidavits'],
     // Visas
     ['australiatouristvisa', 'Australia Tourist Visa', '/australia-visa'],

@@ -17,7 +17,7 @@ const SERVICES = [
   { label: 'Passport',                     path: '/passport',              Icon: BookOpen       },
   { label: 'Pancard',                      path: '/pan-card',              Icon: CreditCard     },
   { label: 'Senior Citizen Card',          path: '/senior-citizen-card',   Icon: Users          },
-  { label: 'Police Verification',          path: '/police-verification',   Icon: BadgeCheck     },
+  { label: 'Police Verification',          path: '/policeverification',   Icon: BadgeCheck     },
   { label: 'MSME Certificate',             path: '/msme-registration',     Icon: Building2      },
   { label: 'Police Clearance Certificate', path: '/police-clearance',      Icon: ClipboardCheck },
   { label: 'Affidavits / Annexure',        path: '/affidavits',            Icon: Scale          },

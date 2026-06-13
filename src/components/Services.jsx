@@ -85,7 +85,7 @@ const SERVICES = [
   {
     icon: '🔍',
     title: 'Police Verification Certificate (PVC)',
-    path: '/police-verification',
+    path: '/policeverification',
     desc: 'Police Verification Certificates (PVC) for tenant verification, domestic help, and other background verification requirements in Bangalore.',
     tags: ['Police Verification', 'Tenant Check', 'Background'],
     price: 'From ₹750',

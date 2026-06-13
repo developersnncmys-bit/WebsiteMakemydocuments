@@ -43,7 +43,7 @@ const REVIEWS = [
 const RELATED = [
   { label: 'Insurance',                   path: '/insurance'          },
   { label: 'Tourist Visa',                path: '/tourist-visa'       },
-  { label: 'Police Verification',         path: '/police-verification'},
+  { label: 'Police Verification',         path: '/policeverification'},
   { label: 'Police Clearance Certificate',path: '/police-clearance'   },
   { label: 'Pan Card',                    path: '/pan-card'           },
   { label: 'Affidavits / Annexure',       path: '/affidavits'         },
