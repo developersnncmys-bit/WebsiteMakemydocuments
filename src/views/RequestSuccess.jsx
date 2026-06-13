@@ -72,16 +72,6 @@ const S = {
     color: '#333',
     lineHeight: 1.55,
   },
-  whatsapp: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    textDecoration: 'none',
-    color: '#25d366',
-    fontWeight: 'bold',
-    marginTop: '6px',
-    gap: '8px',
-  },
-  whatsappLogo: { width: '22px', height: '22px' },
   btnWrap: {
     width: '100%',
     display: 'flex',
@@ -119,34 +109,31 @@ export default function RequestSuccess({ slug }) {
   const svc = getService(slug)
 
   return (
-    <div style={S.page}>
-      <div style={S.content}>
+    <div style={S.page} className="rs-page">
+      {/* Static <style> (not styled-jsx) — ships in the HTML so there's no
+          unstyled flash, and lets us add the mobile breakpoint that inline
+          styles can't express. */}
+      <style>{`
+        @media (max-width: 640px) {
+          .rs-page    { padding: 14px !important; align-items: flex-start !important; }
+          .rs-content { padding: 24px 18px !important; gap: 16px !important; }
+          .rs-header  { font-size: 20px !important; }
+          .rs-message { font-size: 14.5px !important; }
+          .rs-check-circle { width: 64px !important; height: 64px !important; min-width: 64px !important; min-height: 64px !important; max-width: 64px !important; max-height: 64px !important; }
+          .rs-check   { font-size: 38px !important; }
+          .rs-img     { max-height: 220px !important; }
+        }
+      `}</style>
+      <div style={S.content} className="rs-content">
         <div style={S.text}>
           <div style={S.checkWrap}>
-            <div style={S.checkCircle}>
-              <span style={S.check}>&#10003;</span>
+            <div style={S.checkCircle} className="rs-check-circle">
+              <span style={S.check} className="rs-check">&#10003;</span>
             </div>
           </div>
 
-          <h1 style={S.header}>Application Received</h1>
-          <p style={S.message}>{svc.message}</p>
-
-          {svc.cta?.href && (
-            <a
-              href={svc.cta.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={S.whatsapp}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-                alt="WhatsApp"
-                style={S.whatsappLogo}
-              />
-              <span>{svc.cta.label}</span>
-            </a>
-          )}
+          <h1 style={S.header} className="rs-header">Application Received</h1>
+          <p style={S.message} className="rs-message">{svc.message}</p>
 
           <div style={S.btnWrap}>
             <Link href="/" style={S.back}>Back to Home</Link>
@@ -156,7 +143,7 @@ export default function RequestSuccess({ slug }) {
         {svc.image && (
           <div style={S.image}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={svc.image} alt={svc.label} style={S.imageImg} />
+            <img src={svc.image} alt={svc.label} style={S.imageImg} className="rs-img" />
           </div>
         )}
       </div>
