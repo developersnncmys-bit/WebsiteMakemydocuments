@@ -6,9 +6,15 @@ import ReviewSlider from '../../components/ReviewSlider'
 import {
   UserPlus, Upload, ShieldCheck, CreditCard, CalendarCheck,
   MapPin, Shield, Package, ChevronRight, FileText, AlertCircle, CheckCircle2,
+  Phone, MessageCircle,
 } from 'lucide-react'
 
 const STEP_ICONS = [UserPlus, Upload, ShieldCheck, CreditCard, CalendarCheck, MapPin, Shield, Package]
+
+// Contact number shown on the landing pages (call + WhatsApp).
+const PHONE = '8867529731'
+const WA_LINK = `https://wa.me/91${PHONE}`
+const TEL_LINK = `tel:+91${PHONE}`
 
 const I = ({ icon: Icon, size = 22, color = 'var(--teal)' }) => (
   <Icon size={size} color={color} strokeWidth={1.8} />
@@ -42,6 +48,14 @@ function ApplyForm() {
         <Link href="/passport-form" className="pan-apply-btn">
           Apply Online <ChevronRight size={16} strokeWidth={2.5} />
         </Link>
+        <a href={TEL_LINK}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 10, padding: '12px', borderRadius: 10, border: '1.5px solid var(--teal)', color: 'var(--teal)', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
+          <Phone size={16} /> Call {PHONE}
+        </a>
+        <a href={WA_LINK} target="_blank" rel="noopener noreferrer"
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 8, padding: '12px', borderRadius: 10, background: '#25D366', color: '#fff', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
+          <MessageCircle size={16} /> WhatsApp
+        </a>
       </div>
     </div>
   )
@@ -87,8 +101,16 @@ export default function PassportAgentCity({ city }) {
                 Starting from {city.startingFrom}
               </span>
             </div>
-            <div className="svc-hero-acts">
+            <div className="svc-hero-acts" style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               <Link href="/passport-form" className="btn-amber">Apply Now →</Link>
+              <a href={TEL_LINK}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#fff', color: 'var(--teal-dk, #1a3d6e)', fontWeight: 700, padding: '14px 22px', borderRadius: 10, textDecoration: 'none' }}>
+                <Phone size={16} /> Call Now
+              </a>
+              <a href={WA_LINK} target="_blank" rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#25D366', color: '#fff', fontWeight: 700, padding: '14px 22px', borderRadius: 10, textDecoration: 'none' }}>
+                <MessageCircle size={16} /> WhatsApp
+              </a>
             </div>
           </div>
           <div className="svc-hero-badges">

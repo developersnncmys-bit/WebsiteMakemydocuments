@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation'
 import Nav         from '@/components/Nav'
 import Footer      from '@/components/Footer'
 import WhatsAppFAB from '@/components/WhatsAppFAB'
-import Cursor      from '@/components/Cursor'
 import ProgressBar from '@/components/ProgressBar'
 
 const NO_FOOTER_SET = new Set([
@@ -78,9 +77,6 @@ export default function LayoutShell({ children }) {
 
   return (
     <>
-      {/* Custom cursor zooms on hover over buttons/links — looks weird on the
-          post-payment screen where the user has just been redirected. */}
-      {!isStandalone && <Cursor />}
       {!isStandalone && <ProgressBar />}
       {showNav && <Nav />}
       {children}
