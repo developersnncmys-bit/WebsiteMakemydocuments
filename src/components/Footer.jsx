@@ -33,8 +33,12 @@ export default function Footer() {
             Serving 1 Lakh+ customers since 2013.
           </p>
           <div className="f-socials">
-            {['f', 'in', 'tw'].map(s => (
-              <a key={s} className="fsoc" href="#">{s}</a>
+            {[
+              { label: 'f',  href: 'https://www.facebook.com/makemydocuments' },
+              { label: 'in', href: 'https://www.instagram.com/make_my_documents' },
+              { label: 'tw', href: 'https://www.twitter.com/makemydocuments' },
+            ].map(s => (
+              <a key={s.label} className="fsoc" href={s.href} target="_blank" rel="noreferrer">{s.label}</a>
             ))}
           </div>
         </div>
