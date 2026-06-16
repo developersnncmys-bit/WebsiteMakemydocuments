@@ -74,6 +74,9 @@ export default function LayoutShell({ children }) {
   const showNav    = !isStandalone
   const showFooter = !isStandalone && !NO_FOOTER_SET.has(pathname) && !isAffidavitForm && !isServiceForm
   const showWaFab  = !isStandalone && !NO_WA_FAB_SET.has(pathname) && !isAffidavitForm && !isBlogPage && !isServiceForm
+  // The floating Call button is ONLY for the passport landing pages
+  // (/passport-agent-in-<city>), not site-wide.
+  const isPassportLanding = pathname.startsWith('/passport-agent-in-')
 
   return (
     <>
@@ -81,7 +84,7 @@ export default function LayoutShell({ children }) {
       {showNav && <Nav />}
       {children}
       {showFooter && <Footer />}
-      {showWaFab  && <WhatsAppFAB />}
+      {showWaFab  && <WhatsAppFAB showCall={isPassportLanding} />}
     </>
   )
 }
