@@ -876,6 +876,18 @@ footer { background: var(--teal-dk); padding: 60px 5% 28px; border-top: 1px soli
   animation: waPop .6s 1.5s var(--ease2) both;
 }
 .wa-fab:hover { transform: scale(1.12); background: #075E54; box-shadow: 0 10px 36px rgba(7,94,84,.5); }
+/* Call FAB — stacked directly above the WhatsApp bubble */
+.call-fab {
+  position: fixed; bottom: 96px; right: 28px; z-index: 999;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #2563eb; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 6px 28px rgba(37,99,235,.4);
+  transition: transform .25s var(--ease2), box-shadow .2s;
+  animation: waPop .6s 1.5s var(--ease2) both;
+}
+.call-fab:hover { transform: scale(1.12); background: #1d4ed8; box-shadow: 0 10px 36px rgba(29,78,216,.5); }
 .wa-fab-pulse {
   position: absolute; width: 100%; height: 100%; border-radius: 50%;
   background: #25D366; opacity: 0; pointer-events: none;
