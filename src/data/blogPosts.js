@@ -663,6 +663,7 @@ function mapApiBlog(b) {
     readTime: b.readTime || '5 min',
     gradient: pres.gradient,
     Icon: pres.Icon,
+    image: b.image || '',
     content: b.content || '',
   }
 }

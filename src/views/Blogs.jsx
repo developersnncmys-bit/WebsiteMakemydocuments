@@ -62,8 +62,12 @@ function BlogCard({ post, large }) {
       className={`bl-card${large ? ' bl-card-large' : ''}`}
     >
       <div className="bl-img" style={{ background: post.gradient }}>
+        {/* Use the uploaded image when present; otherwise the gradient + icon. */}
+        {post.image
+          ? <img src={post.image} alt={post.title} className="bl-img-photo" loading="lazy"
+                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+          : <Icon size={large ? 72 : 52} strokeWidth={.8} color="rgba(255,255,255,.18)" className="bl-img-ico" />}
         <div className="bl-img-overlay" />
-        <Icon size={large ? 72 : 52} strokeWidth={.8} color="rgba(255,255,255,.18)" className="bl-img-ico" />
         <div className="bl-img-top">
           <span className="bl-cat-tag" style={catStyle(post.cat)}>{post.cat}</span>
         </div>

@@ -294,11 +294,14 @@ export default function BlogDetail() {
           {/* LEFT — article fills its column */}
           <article className="bd-article" style={{ minWidth: 0, width: '100%' }}>
 
-            {/* Featured visual */}
+            {/* Featured visual — uploaded image when present, else gradient + icon */}
             <div className="bd-feat-visual" style={{ background: post.gradient }}>
-              <div className="bd-feat-icon-wrap">
-                <Icon size={80} color="rgba(255,255,255,.22)" strokeWidth={1} />
-              </div>
+              {post.image
+                ? <img src={post.image} alt={post.title} loading="lazy"
+                       style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                : <div className="bd-feat-icon-wrap">
+                    <Icon size={80} color="rgba(255,255,255,.22)" strokeWidth={1} />
+                  </div>}
               <div className="bd-feat-overlay" />
               <div className="bd-feat-dots" />
             </div>
