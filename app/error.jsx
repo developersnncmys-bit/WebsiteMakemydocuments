@@ -1,34 +1,27 @@
 'use client'
 
 // Route-level error boundary. The most common cause of an intermittent
-// "Application error: a client-side exception" on a static site is a
-// ChunkLoadError: a new deploy replaced the JS files this browser tab was
-// using, so a code-split chunk it tries to load no longer exists. Reloading
-// fetches the fresh build and fixes it — so we do that automatically (guarded
-// against a reload loop). Any other error shows a friendly Reload button
-// instead of a blank white screen.
+// "Something went wrong" on a static site is a STALE BUILD: a new deploy
+// replaced the HTML/JS this tab was using, so a code-split chunk it loads no
+// longer exists (ChunkLoadError) — or a transient hiccup. A reload fetches the
+// fresh build and fixes it, so we auto-reload ONCE on ANY error. If the error
+// recurs within the throttle window (the reload didn't help → a real bug), we
+// stop and show the button instead of looping.
 
 import { useEffect } from 'react'
 
-const isChunkError = (error) => {
-  const s = `${error?.name || ''} ${error?.message || ''}`
-  return /chunkloaderror|loading chunk|dynamically imported module|importing a module script failed/i.test(s)
-}
-
 export default function Error({ error, reset }) {
   useEffect(() => {
-    if (isChunkError(error)) {
-      try {
-        const KEY = 'mmd-chunk-reload-at'
-        const last = Number(sessionStorage.getItem(KEY) || 0)
-        // Reload at most once per 10s so a persistent error can't loop forever.
-        if (Date.now() - last > 10000) {
-          sessionStorage.setItem(KEY, String(Date.now()))
-          window.location.reload()
-        }
-      } catch {
+    try {
+      const KEY = 'mmd-err-reload-at'
+      const last = Number(sessionStorage.getItem(KEY) || 0)
+      // Reload at most once per 20s so a persistent error can't loop forever.
+      if (Date.now() - last > 20000) {
+        sessionStorage.setItem(KEY, String(Date.now()))
         window.location.reload()
       }
+    } catch {
+      window.location.reload()
     }
   }, [error])
 

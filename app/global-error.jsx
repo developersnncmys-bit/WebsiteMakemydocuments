@@ -6,24 +6,19 @@
 
 import { useEffect } from 'react'
 
-const isChunkError = (error) => {
-  const s = `${error?.name || ''} ${error?.message || ''}`
-  return /chunkloaderror|loading chunk|dynamically imported module|importing a module script failed/i.test(s)
-}
-
 export default function GlobalError({ error }) {
   useEffect(() => {
-    if (isChunkError(error)) {
-      try {
-        const KEY = 'mmd-chunk-reload-at'
-        const last = Number(sessionStorage.getItem(KEY) || 0)
-        if (Date.now() - last > 10000) {
-          sessionStorage.setItem(KEY, String(Date.now()))
-          window.location.reload()
-        }
-      } catch {
+    try {
+      const KEY = 'mmd-err-reload-at'
+      const last = Number(sessionStorage.getItem(KEY) || 0)
+      // Auto-reload once per 20s on ANY error so a stale build self-heals,
+      // without looping if the error is persistent.
+      if (Date.now() - last > 20000) {
+        sessionStorage.setItem(KEY, String(Date.now()))
         window.location.reload()
       }
+    } catch {
+      window.location.reload()
     }
   }, [error])
 
