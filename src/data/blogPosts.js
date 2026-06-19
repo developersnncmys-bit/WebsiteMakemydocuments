@@ -664,6 +664,8 @@ function mapApiBlog(b) {
     gradient: pres.gradient,
     Icon: pres.Icon,
     image: b.image || '',
+    metaTitle: b.metaTitle || '',
+    metaDescription: b.metaDescription || '',
     content: b.content || '',
   }
 }

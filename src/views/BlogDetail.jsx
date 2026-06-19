@@ -204,6 +204,26 @@ export default function BlogDetail() {
     return () => { active = false }
   }, [params.slug, router])
 
+  // Keep the browser tab title + meta description in sync with this blog's own
+  // metaTitle/metaDescription. The static build bakes these in at build time;
+  // this updates them live so admin edits show up without waiting for a rebuild
+  // (and Google's JS-rendering crawler sees the latest values).
+  useEffect(() => {
+    if (!post) return
+    const title = post.metaTitle || post.title
+    const desc = post.metaDescription || post.excerpt || ''
+    if (title) document.title = title
+    const setMeta = (selector, attr, key, val) => {
+      if (!val) return
+      let el = document.head.querySelector(selector)
+      if (!el) { el = document.createElement('meta'); el.setAttribute(attr, key); document.head.appendChild(el) }
+      el.setAttribute('content', val)
+    }
+    setMeta('meta[name="description"]', 'name', 'description', desc)
+    setMeta('meta[property="og:title"]', 'property', 'og:title', title)
+    setMeta('meta[property="og:description"]', 'property', 'og:description', desc)
+  }, [post])
+
   useEffect(() => {
     const onScroll = () => {
       const el = document.documentElement
