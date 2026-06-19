@@ -4,8 +4,8 @@ export const metadata = {
   title: 'Make My Documents™ | Online Document consultancy',
   description: ' Make My Documents Is The Smartest Way To Get Your Documents Done.Services: Pan card, Passport, Rental Agreement, Insurance, Senior Citizen Card, Etc. ',
   keywords: 'make my documents, passport, pan card, rental agreement, senior citzen card, bike insurance, car insurance, health insurance,  food license',
-  authors: [{ url: 'https://makemydocuments.com/' }],
-  alternates: { canonical: 'https://makemydocuments.com/' },
+  authors: [{ url: 'https://www.makemydocuments.com/' }],
+  alternates: { canonical: 'https://www.makemydocuments.com/' },
   robots: 'ALL, index, follow',
   other: {
     rating: 'general',

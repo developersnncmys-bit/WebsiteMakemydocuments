@@ -5,7 +5,7 @@ export const metadata = {
   title: 'Passport Agent in Ankola | Apply, Renew & Reissue Passport Online',
   description: 'Looking for a trusted passport agent in Ankola, Karnataka? Make My Documents helps you apply for a new passport, renew or reissue with expert guidance, fast PSK/POPSK appointment booking, document verification and doorstep delivery.',
   keywords: 'passport agent in Ankola, passport agent near me Ankola, passport services in Ankola, apply passport online Ankola, passport renewal Ankola, tatkal passport Ankola, passport office Ankola, PSK appointment Ankola, passport consultant Ankola, passport agent Ankola Karnataka',
-  alternates: { canonical: 'https://makemydocuments.com/passport-agent-in-ankola' },
+  alternates: { canonical: 'https://www.makemydocuments.com/passport-agent-in-ankola' },
   robots: 'ALL, index, follow',
 }
 

@@ -60,7 +60,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params
   const base = process.env.NEXT_PUBLIC_API_URL || 'https://api.makemydocuments.com'
-  const canonical = `https://makemydocuments.com/blogs/${slug}`
+  const canonical = `https://www.makemydocuments.com/blogs/${slug}`
   const fallback = {
     title: 'Make My Documents Blog | Expert Tips on Document Services',
     description: 'Read expert guides on passports, visas, PAN cards, MSME certificates, insurance, and more from Make My Documents.',

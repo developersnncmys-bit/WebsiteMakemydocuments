@@ -12,7 +12,7 @@ export async function generateMetadata({ params }) {
   return {
     title: `${name} Online | Make My Documents`,
     description: a ? `${a.desc} Apply for ${name} online — legal drafting, notarisation, and doorstep delivery by Make My Documents.` : 'Apply for affidavits online — legal drafting, notarisation, and doorstep delivery by Make My Documents.',
-    alternates: { canonical: `https://makemydocuments.com/affidavit/${type}` },
+    alternates: { canonical: `https://www.makemydocuments.com/affidavit/${type}` },
     robots: 'noindex, nofollow',
   }
 }

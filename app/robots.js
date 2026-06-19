@@ -13,7 +13,7 @@ export default function robots() {
         disallow: ['/request_success', '/failure', '/affidavit/'],
       },
     ],
-    sitemap: `${SITE}/sitemap.xml`,
+    sitemap: [`${SITE}/sitemap.xml`, `${SITE}/blog-sitemap.xml`],
     host: SITE,
   };
 }

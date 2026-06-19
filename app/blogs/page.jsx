@@ -3,7 +3,7 @@ import Blogs from '@/views/Blogs'
 export const metadata = {
   title: 'Make My Documents Blog | Expert Tips on Document Services',
   description: 'Explore our blog for expert tips and insights on document services like PAN cards, passports, visas, MSME certificates, and more.',
-  alternates: { canonical: 'https://makemydocuments.com/blogs' },
+  alternates: { canonical: 'https://www.makemydocuments.com/blogs' },
 }
 
 // Fetch the published blog list at build time so the Blog JSON-LD is baked
@@ -36,12 +36,12 @@ export default async function Page() {
     '@type': 'Blog',
     name: 'Make My Documents Blog',
     description: 'Explore expert advice on documents like PAN cards, passports, visas, MSME certifications, and more.',
-    url: 'https://makemydocuments.com/blogs',
+    url: 'https://www.makemydocuments.com/blogs',
     blogPost: blogs.slice(0, 12).map((blog) => ({
       '@type': 'BlogPosting',
       headline: blog.metaTitle || blog.title || '',
       description: blog.metaDescription || blog.excerpt || '',
-      url: `https://makemydocuments.com/blogs/${blog.slug || ''}`,
+      url: `https://www.makemydocuments.com/blogs/${blog.slug || ''}`,
       image: blog.image ? `https://api.makemydocuments.com/uploads/blogs/${blog.image}` : undefined,
       author: { '@type': 'Person', name: 'Make My Documents' },
       publisher: {
@@ -49,7 +49,7 @@ export default async function Page() {
         name: 'Make My Documents',
         logo: {
           '@type': 'ImageObject',
-          url: 'https://makemydocuments.com/static/media/logo.31258f6da87268f7ee2d04f6f96e256d.svg',
+          url: 'https://www.makemydocuments.com/static/media/logo.31258f6da87268f7ee2d04f6f96e256d.svg',
         },
       },
       datePublished: blog.createdAt || '',
@@ -61,8 +61,8 @@ export default async function Page() {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://makemydocuments.com/' },
-      { '@type': 'ListItem', position: 2, name: 'Blogs', item: 'https://makemydocuments.com/blogs' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.makemydocuments.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Blogs', item: 'https://www.makemydocuments.com/blogs' },
     ],
   }
 

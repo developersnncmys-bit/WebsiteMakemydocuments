@@ -5,7 +5,6 @@
 export const dynamic = 'force-static';
 
 const SITE = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.makemydocuments.com').replace(/\/$/, '');
-const API = process.env.NEXT_PUBLIC_API_URL || 'https://api.makemydocuments.com';
 
 // Public, indexable pages. Excludes transactional flows (*-form, /failure,
 // /request_success) which shouldn't be indexed.
@@ -46,32 +45,14 @@ const STATIC_ROUTES = [
 export default async function sitemap() {
   const now = new Date();
 
+  // Blog detail pages live in their own /blog-sitemap.xml (see
+  // app/blog-sitemap.xml/route.js), referenced from robots.txt.
   const urls = STATIC_ROUTES.map((r) => ({
     url: r ? `${SITE}/${r}` : `${SITE}/`,
     lastModified: now,
     changeFrequency: r === '' || r === 'blogs' ? 'daily' : 'weekly',
     priority: r === '' ? 1 : 0.7,
   }));
-
-  // Blog detail pages — fetched at build. Best-effort: if the API is
-  // unreachable during the build, the static pages above still ship.
-  try {
-    const res = await fetch(`${API}/api/blogs?status=published`, { cache: 'no-store' });
-    const json = await res.json();
-    if (json && Array.isArray(json.data)) {
-      for (const b of json.data) {
-        if (!b || !b.slug) continue;
-        urls.push({
-          url: `${SITE}/blogs/${b.slug}`,
-          lastModified: b.updatedAt ? new Date(b.updatedAt) : now,
-          changeFrequency: 'monthly',
-          priority: 0.6,
-        });
-      }
-    }
-  } catch {
-    // ignore — keep the static routes
-  }
 
   return urls;
 }

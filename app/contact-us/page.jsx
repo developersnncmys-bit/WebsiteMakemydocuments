@@ -4,8 +4,8 @@ export const metadata = {
   title: 'Contact Us | Make My Documents™ | Get Assistance with Visa, Passport & More',
   description: 'Reach out to Make My Documents for hassle-free assistance with PAN cards, passports, travel visas, senior citizen cards, insurance policies, and more. Contact us today!',
   keywords: 'contact Make My Documents, document consultancy, PAN card help, passport assistance, insurance services, senior citizen card, travel visa support, PCC, PVC',
-  authors: [{ url: 'https://makemydocuments.com/' }],
-  alternates: { canonical: 'https://makemydocuments.com/contact-us' },
+  authors: [{ url: 'https://www.makemydocuments.com/' }],
+  alternates: { canonical: 'https://www.makemydocuments.com/contact-us' },
   robots: 'ALL, index, follow',
   other: {
     rating: 'general',
