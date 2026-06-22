@@ -78,13 +78,22 @@ export default function LayoutShell({ children }) {
   // (/passport-agent-in-<city>), not site-wide.
   const isPassportLanding = pathname.startsWith('/passport-agent-in-')
 
+  // WhatsApp FAB number: home / insurance / contact / visa pages use the
+  // 99800 97315 line; everything else keeps the default number.
+  const useAltWa =
+    pathname === '/' ||
+    pathname.includes('insurance') ||
+    pathname === '/contact-us' ||
+    pathname.includes('visa')
+  const waNumber = useAltWa ? '919980097315' : '918867529731'
+
   return (
     <>
       {!isStandalone && <ProgressBar />}
       {showNav && <Nav />}
       {children}
       {showFooter && <Footer />}
-      {showWaFab  && <WhatsAppFAB showCall={isPassportLanding} />}
+      {showWaFab  && <WhatsAppFAB showCall={isPassportLanding} number={waNumber} />}
     </>
   )
 }
