@@ -246,10 +246,10 @@ export default function Passport() {
           <div className="ins-callout-box" style={{ maxWidth: 720, marginTop: 20 }}>
             <ul className="pan-bullet-list" style={{ marginBottom: 0 }}>
               <li>
-                <strong style={{ color: 'var(--amber)' }}>Rs. 2,499/-</strong> For (Normal Application)
+                <strong style={{ color: 'var(--amber)' }}>Rs. 3,999/-</strong> For (Normal Application)
               </li>
               <li>
-                <strong style={{ color: 'var(--amber)' }}>Rs. 4,499/-</strong> For (Tatkal Application)
+                <strong style={{ color: 'var(--amber)' }}>Rs. 6,499/-</strong> For (Tatkal Application)
               </li>
               <li>
                 <strong style={{ color: 'var(--amber)' }}>Rs. 99/-</strong> as booking fee. Need to pay while submitting online form{' '}

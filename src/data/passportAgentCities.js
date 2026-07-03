@@ -155,7 +155,7 @@ const makeFaqs = (city) => ([
     a: `You can reach us via phone at +91 94296 90973 or email at support@makemydocuments.com. You can also fill out the Apply Online form on this page and our team will contact you shortly.` },
 ])
 
-const makeCity = (city, slug, charge = { normal: '2,499', tatkal: '4,499', booking: '99' }) => ({
+const makeCity = (city, slug, charge = { normal: '3,999', tatkal: '6,499', booking: '99' }) => ({
   ...COMMON,
   city,
   slug,
@@ -163,7 +163,7 @@ const makeCity = (city, slug, charge = { normal: '2,499', tatkal: '4,499', booki
   starRating: 5,
   processingNormal: '15-20 working days (Normal)',
   processingTatkal: '5-10 working days (Tatkal)',
-  startingFrom: '₹2,499',
+  startingFrom: '₹3,999',
   showRenewalDocs: true,
   charge,
   reviews: makeReviews(city),
@@ -207,9 +207,9 @@ export const passportAgentCities = {
     starRating: 5,
     processingNormal: '15-20 working days (Normal)',
     processingTatkal: '5-10 working days (Tatkal)',
-    startingFrom: '₹2,499',
+    startingFrom: '₹3,999',
     showRenewalDocs: false,
-    charge: { normal: '2,499', tatkal: '4,499', booking: '99' },
+    charge: { normal: '3,999', tatkal: '6,499', booking: '99' },
     reviews: [
       { av: 'P', name: 'Prakasha N', svc: 'Passport',
         text: '"I really appreciate Suneetha Madam and Murthy Sir helped me out very much. Got my passport and delivered on time. The entire process was smooth and I appreciate the timely communication and professionalism."' },
@@ -251,9 +251,9 @@ export const passportAgentCities = {
     starRating: 5,
     processingNormal: '15-20 working days (Normal)',
     processingTatkal: '5-10 working days (Tatkal)',
-    startingFrom: '₹2,499',
+    startingFrom: '₹3,999',
     showRenewalDocs: true,
-    charge: { normal: '5,499', tatkal: '6,499', booking: '99' },
+    charge: { normal: '3,999', tatkal: '6,499', booking: '99' },
     reviews: [
       { av: 'P', name: 'Prakasha N', svc: 'Passport',
         text: '"I really appreciate Suneetha Madam and Murthy Sir helped me out very much. Got my passport and delivered on time. The entire process was smooth and I appreciate the timely communication and professionalism. I am very much thankful to Suneetha Madam. She is well knowledged about passport documentation and very experienced too."' },
@@ -285,9 +285,9 @@ export const passportAgentCities = {
     starRating: 5,
     processingNormal: '15-20 working days (Normal)',
     processingTatkal: '5-10 working days (Tatkal)',
-    startingFrom: '₹2,499',
+    startingFrom: '₹3,999',
     showRenewalDocs: true,
-    charge: { normal: '2,499', tatkal: '4,499', booking: '99' },
+    charge: { normal: '3,999', tatkal: '6,499', booking: '99' },
     reviews: [
       { av: 'N', name: 'Neha', svc: 'Passport',
         text: '"To someone applying for the first time I found their support truly valuable. Great team!"' },
@@ -327,9 +327,9 @@ export const passportAgentCities = {
     starRating: 5,
     processingNormal: '15-20 working days (Normal)',
     processingTatkal: '5-10 working days (Tatkal)',
-    startingFrom: '₹2,499',
+    startingFrom: '₹3,999',
     showRenewalDocs: true,
-    charge: { normal: '2,499', tatkal: '4,499', booking: '99' },
+    charge: { normal: '3,999', tatkal: '6,499', booking: '99' },
     reviews: [
       { av: 'R', name: 'Rohan Mehta', svc: 'Passport',
         text: '"Applied for a Tatkal passport through Make My Documents Mumbai team. The entire process was handled professionally and I got my passport in less than a week. Excellent service!"' },
@@ -367,9 +367,9 @@ export const passportAgentCities = {
     starRating: 5,
     processingNormal: '15-20 working days (Normal)',
     processingTatkal: '5-10 working days (Tatkal)',
-    startingFrom: '₹2,499',
+    startingFrom: '₹3,999',
     showRenewalDocs: true,
-    charge: { normal: '2,499', tatkal: '4,499', booking: '99' },
+    charge: { normal: '3,999', tatkal: '6,499', booking: '99' },
     reviews: [
       { av: 'V', name: 'Vaibhav Joshi', svc: 'Passport',
         text: '"Make My Documents in Pune handled my passport application very smoothly. Quick response, clear communication and timely delivery. I would definitely recommend them."' },
@@ -407,9 +407,9 @@ export const passportAgentCities = {
     starRating: 5,
     processingNormal: '15-20 working days (Normal)',
     processingTatkal: '5-10 working days (Tatkal)',
-    startingFrom: '₹2,499',
+    startingFrom: '₹3,999',
     showRenewalDocs: true,
-    charge: { normal: '2,499', tatkal: '4,499', booking: '99' },
+    charge: { normal: '3,999', tatkal: '6,499', booking: '99' },
     reviews: [
       { av: 'S', name: 'Suresh Gowda', svc: 'Passport',
         text: '"Got my passport through Make My Documents Mysore. Very professional team, transparent pricing and the entire process was hassle-free. Highly recommended!"' },
@@ -447,9 +447,9 @@ export const passportAgentCities = {
     starRating: 5,
     processingNormal: '15-20 working days (Normal)',
     processingTatkal: '5-10 working days (Tatkal)',
-    startingFrom: '₹2,499',
+    startingFrom: '₹3,999',
     showRenewalDocs: true,
-    charge: { normal: '2,499', tatkal: '4,499', booking: '99' },
+    charge: { normal: '3,999', tatkal: '6,499', booking: '99' },
     reviews: [
       { av: 'A', name: 'Arjun Sharma', svc: 'Passport',
         text: '"Excellent service from Make My Documents Delhi team. Got my passport application processed without any hassle. The team is very professional and responsive throughout."' },
@@ -487,9 +487,9 @@ export const passportAgentCities = {
     starRating: 5,
     processingNormal: '15-20 working days (Normal)',
     processingTatkal: '5-10 working days (Tatkal)',
-    startingFrom: '₹2,499',
+    startingFrom: '₹3,999',
     showRenewalDocs: true,
-    charge: { normal: '2,499', tatkal: '4,499', booking: '99' },
+    charge: { normal: '3,999', tatkal: '6,499', booking: '99' },
     reviews: [
       { av: 'P', name: 'Prakasha N', svc: 'Passport',
         text: '"I really appreciate Suneetha Madam and Murthy Sir helped me out very much. Got my passport and delivered on time. The entire process was smooth and I appreciate the timely communication and professionalism."' },
