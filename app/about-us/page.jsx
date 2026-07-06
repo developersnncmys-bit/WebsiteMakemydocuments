@@ -1,8 +1,8 @@
 import AboutUs from '@/views/AboutUs'
 
 export const metadata = {
-  title: 'About Us | Make My Documents™ - Your Trusted Online Document Consultancy',
-  description: 'Learn about Make My Documents™, a trusted online platform simplifying document-related services like PAN card, Passport, Insurance, and Senior Citizen Cards. Your hassle-free solution to all documentation needs.',
+  title: 'About Make My Documents | Trusted Document Consultancy',
+  description: 'Make My Documents is a trusted online platform for PAN card, passport, visa, insurance & senior citizen card services — fast, simple & hassle-free.',
   keywords: 'about Make My Documents, document consultancy, online document services, PAN card, passport, insurance, senior citizen card, document support, hassle-free documentation',
   authors: [{ url: 'https://www.makemydocuments.com/about-us' }],
   alternates: { canonical: 'https://www.makemydocuments.com/about-us' },

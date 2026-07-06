@@ -1,8 +1,8 @@
 import ContactUs from '@/views/ContactUs'
 
 export const metadata = {
-  title: 'Contact Us | Make My Documents™ | Get Assistance with Visa, Passport & More',
-  description: 'Reach out to Make My Documents for hassle-free assistance with PAN cards, passports, travel visas, senior citizen cards, insurance policies, and more. Contact us today!',
+  title: 'Contact Make My Documents | Passport, PAN & Visa Help',
+  description: 'Contact Make My Documents for help with passport, PAN card, visa, insurance & senior citizen card services. Fast, reliable support — reach us today.',
   keywords: 'contact Make My Documents, document consultancy, PAN card help, passport assistance, insurance services, senior citizen card, travel visa support, PCC, PVC',
   authors: [{ url: 'https://www.makemydocuments.com/' }],
   alternates: { canonical: 'https://www.makemydocuments.com/contact-us' },
