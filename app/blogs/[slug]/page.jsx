@@ -1,4 +1,5 @@
 import BlogDetail from '@/views/BlogDetail'
+import { getBlogBySlug } from '@/data/blogPosts'
 
 const SLUGS = [
   'how-to-apply-for-passport-online-india-2026',
@@ -69,19 +70,34 @@ export async function generateMetadata({ params }) {
   }
   try {
     const res = await fetch(`${base}/api/blogs/slug/${encodeURIComponent(slug)}`)
-    if (!res.ok) return fallback
-    const json = await res.json()
-    const b = json && json.success ? json.data : null
-    if (!b) return fallback
+    if (res.ok) {
+      const json = await res.json()
+      const b = json && json.success ? json.data : null
+      if (b) {
+        return {
+          title: b.metaTitle || b.title || fallback.title,
+          description: b.metaDescription || b.excerpt || fallback.description,
+          alternates: { canonical },
+          robots: 'ALL, index, follow',
+        }
+      }
+    }
+  } catch {
+    // fall through to the bundled lookup below
+  }
+
+  // Not in the backend — this is one of the built-in (bundled) posts. Use its
+  // own title/excerpt for meta instead of the generic site fallback.
+  const bundled = getBlogBySlug(slug)
+  if (bundled) {
     return {
-      title: b.metaTitle || b.title || fallback.title,
-      description: b.metaDescription || b.excerpt || fallback.description,
+      title: bundled.title || fallback.title,
+      description: bundled.excerpt || fallback.description,
       alternates: { canonical },
       robots: 'ALL, index, follow',
     }
-  } catch {
-    return fallback
   }
+  return fallback
 }
 
 export default function Page() {
