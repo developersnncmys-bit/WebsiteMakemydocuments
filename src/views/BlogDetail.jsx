@@ -314,16 +314,26 @@ export default function BlogDetail() {
           {/* LEFT — article fills its column */}
           <article className="bd-article" style={{ minWidth: 0, width: '100%' }}>
 
-            {/* Featured visual — uploaded image when present, else gradient + icon */}
-            <div className="bd-feat-visual" style={{ background: post.gradient }}>
+            {/* Featured visual — uploaded image when present, else gradient + icon.
+                With an image we drop the fixed height and match the banner's own
+                aspect ratio so the whole designed banner (logo + title) shows
+                without cropping, and skip the gradient/dot overlays. */}
+            <div
+              className="bd-feat-visual"
+              style={post.image
+                ? { background: post.gradient, height: 'auto', aspectRatio: '1200 / 630' }
+                : { background: post.gradient }}
+            >
               {post.image
                 ? <img src={post.image} alt={post.title} loading="lazy"
-                       style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                : <div className="bd-feat-icon-wrap">
-                    <Icon size={80} color="rgba(255,255,255,.22)" strokeWidth={1} />
-                  </div>}
-              <div className="bd-feat-overlay" />
-              <div className="bd-feat-dots" />
+                       style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} />
+                : <>
+                    <div className="bd-feat-icon-wrap">
+                      <Icon size={80} color="rgba(255,255,255,.22)" strokeWidth={1} />
+                    </div>
+                    <div className="bd-feat-overlay" />
+                    <div className="bd-feat-dots" />
+                  </>}
             </div>
 
             {/* Content */}
