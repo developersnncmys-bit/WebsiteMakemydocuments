@@ -325,8 +325,14 @@ export default function BlogDetail() {
                 : { background: post.gradient }}
             >
               {post.image
-                ? <img src={post.image} alt={post.title} loading="lazy"
-                       style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} />
+                ? <>
+                    <img src={post.image} alt={post.title} loading="lazy"
+                         style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} />
+                    {/* White logo overlay (kept out of the banner image to keep
+                        the payload light — loaded once and cached). */}
+                    <img src="/logo-white.png" alt="Make My Documents"
+                         style={{ position: 'absolute', top: '5.5%', right: '4%', height: '11%', width: 'auto', zIndex: 2 }} />
+                  </>
                 : <>
                     <div className="bd-feat-icon-wrap">
                       <Icon size={80} color="rgba(255,255,255,.22)" strokeWidth={1} />

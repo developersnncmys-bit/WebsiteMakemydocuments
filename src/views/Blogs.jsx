@@ -70,6 +70,12 @@ function BlogCard({ post, large }) {
         <div className="bl-img-overlay" />
         <div className="bl-img-top">
           <span className="bl-cat-tag" style={catStyle(post.cat)}>{post.cat}</span>
+          {/* White logo overlay (kept out of the banner image so the blog list
+              stays lightweight — loaded once and cached). */}
+          {post.image && (
+            <img src="/logo-white.png" alt="Make My Documents"
+                 style={{ height: 22, width: 'auto', opacity: 0.95 }} />
+          )}
         </div>
         {large && <div className="bl-featured-label">Featured</div>}
       </div>
