@@ -106,6 +106,12 @@ export default function RootLayout({ children }) {
             src="https://px.ads.linkedin.com/collect/?pid=7447820&fmt=gif" />
         </noscript>
 
+        {/* OpenAI Ads Pixel */}
+        <Script id="openai-pixel" strategy="afterInteractive">{`
+          !function(w,d,s,u){if(w.oaiq)return;var q=function(){q.q.push(arguments)};q.q=[];w.oaiq=q;var j=d.createElement(s);j.async=1;j.src=u;var f=d.getElementsByTagName(s)[0];f.parentNode.insertBefore(j,f)}(window,document,"script","https://bzrcdn.openai.com/sdk/oaiq.min.js");
+          oaiq("init",{pixelId:"HULVHPAa7V2sUW9YGn8QiS",debug:true});
+        `}</Script>
+
         <LayoutShell>{children}</LayoutShell>
       </body>
     </html>
