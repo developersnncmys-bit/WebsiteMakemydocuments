@@ -9,6 +9,7 @@ import {
 import { getStates, getDistricts } from '../data/locationData'
 import { getAffidavitBySlug } from '../data/affidavitTypes'
 import { submitLead } from '../lib/submitLead'
+import { trackLeadCreated } from '../lib/trackLead'
 import { sendOtp, verifyOtpApi } from '../lib/otp'
 import { paytmCheckout } from '../lib/paytm'
 
@@ -40,6 +41,8 @@ export default function AffidavitForm() {
   const [phase, setPhase] = useState('form') // 'form' | 'otp' | 'summary' | 'payment'
   const [error, setError] = useState('')
   const goPhase = (p) => { setPhase(p); setError('') }
+  // OpenAI Ads conversion: fire when the user lands on the Proceed to Pay page
+  useEffect(() => { if (phase === 'summary') trackLeadCreated() }, [phase])
 
   const orderId = useMemo(() => {
     const ts  = Date.now().toString()

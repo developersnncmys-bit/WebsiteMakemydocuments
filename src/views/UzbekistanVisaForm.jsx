@@ -3,6 +3,7 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import useStepBackButton from '../hooks/useStepBackButton'
 import { submitLead } from '../lib/submitLead'
+import { trackLeadCreated } from '../lib/trackLead'
 import { sendOtp, verifyOtpApi } from '../lib/otp'
 import { paytmCheckout } from '../lib/paytm'
 import Link from 'next/link'
@@ -64,6 +65,8 @@ export default function UzbekistanVisaForm() {
   const [error, setError]  = useState('')
 
   const goPhase = (p) => { setPhase(p) }
+  // OpenAI Ads conversion: fire when the user lands on the Proceed to Pay page
+  useEffect(() => { if (phase === 'summary') trackLeadCreated() }, [phase])
 
   useEffect(() => {
     const base = window.location.pathname.replace(/\/(proceed-to-pay|otp-verification)$/, '')
